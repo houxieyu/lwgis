@@ -382,7 +382,7 @@ define(['3D/renderFactory', "esri/Map","esri/views/MapView",'esri/Basemap',"esri
         var selectQuery = spatiallayer.createQuery();
         selectQuery.set({
             geometry : querypolygon,
-            outFields : ["np_DBO_lwbj_cun.NAME", "np_DBO_lwbj_cun.AREA_CODE",'lwdata.农业人口数'],
+            outFields : ["lwbj_cun.NAME", "lwbj_cun.AREA_CODE",'lwdata.农业人口数'],
             spatialRelationship:$('#tpgx').val()
         });
         /*   var selectsymbol = new SimpleFillSymbol({
@@ -399,11 +399,11 @@ define(['3D/renderFactory', "esri/Map","esri/views/MapView",'esri/Basemap',"esri
                     type: "fields",
                     fieldInfos: [
                         {
-                            fieldName: "np_DBO_lwbj_cun.NAME",
+                            fieldName: "lwbj_cun.NAME",
                             label: "地区"
                         },
                         {
-                            fieldName: "np_DBO_lwbj_cun.AREA_CODE",
+                            fieldName: "lwbj_cun.AREA_CODE",
                             label: "区划码"
                         },
                         {
@@ -425,14 +425,14 @@ define(['3D/renderFactory', "esri/Map","esri/views/MapView",'esri/Basemap',"esri
                 result.symbol =new SimpleFillSymbol({
                     color: [0, 0, 0, 0.1],
                     outline: { // autocasts as new SimpleLineSymbol()
-                        color: result.attributes['np_DBO_lwbj_cun.AREA_CODE'].substr(9,3)<200?[255,0,0]:[255, 255, 0],
+                        color: result.attributes['lwbj_cun.AREA_CODE'].substr(9,3)<200?[255,0,0]:[255, 255, 0],
                         width: 1
                     }
                 });
                 result.popupTemplate = popuptemplate;
                 totalrenkou += result.attributes['lwdata.农业人口数'];
                 //添加条目
-                var li="<li class='panel-result' liid='"+index+"'>"+result.attributes['np_DBO_lwbj_cun.NAME']+":"+result.attributes['np_DBO_lwbj_cun.AREA_CODE']+" </li>";
+                var li="<li class='panel-result' liid='"+index+"'>"+result.attributes['lwbj_cun.NAME']+":"+result.attributes['lwbj_cun.AREA_CODE']+" </li>";
                 $('#nyc_graphics').append(li);
             });
             var r = "<b>查询范围内有村居<font color='red'>" + results.features.length + "</font>个<br/>人口数：" + totalrenkou;
@@ -449,7 +449,10 @@ define(['3D/renderFactory', "esri/Map","esri/views/MapView",'esri/Basemap',"esri
                 });
                 view.goTo([graph.geometry.centroid.x,graph.geometry.centroid.y]);
             });
-        });
+        }, function(error){
+            // This function is called when the promise is rejected
+            console.error(error);  // Logs the error message
+          });
     }
     function clearbaseuponlayer(){
         while(map.layers.length > 2){
